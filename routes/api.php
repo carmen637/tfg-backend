@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PistaController;
 use App\Http\Controllers\Api\PartidoController;
+use App\Http\Controllers\Api\InscripcionController;
 
 // Rutas públicas (sin autenticación)
 Route::post('/register', [AuthController::class, 'register']);
@@ -19,6 +20,10 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::get('/pistas', [PistaController::class, 'index']); //Listar todas
 Route::get('/pistas/{id}', [PistaController::class, 'show']); //Para ver solo una
 
+Route::get('/partidos', [PartidoController::class, 'index']);
+Route::get('/partidos/{id}', [PartidoController::class, 'show']);
+
+Route::get('/partidos/{id}/inscritos', [InscripcionController::class, 'verInscritos']);
 //Rutas que requieren autenticacion sobre las pistas, ya que algunas acciones requieren autenticacion
 Route::middleware('auth:sanctum')->group(function(){
     Route::post('/pistas', [PistaController::class, 'store']); //Para crear una nueva pista
@@ -28,8 +33,10 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/partidos', [PartidoController::class, 'store']);
     Route::put('/partidos/{id}', [PartidoController::class, 'update']);
     Route::delete('/partidos/{id}', [PartidoController::class, 'destroy']);
+
+    Route::post('/partidos/{id}/inscribirse', [InscripcionController::class, 'inscribirse']);
+    Route::delete('/partidos/{id}/cancelar-inscripcion', [InscripcionController::class, 'cancelarInscripcion']);
 });
 
-Route::get('/partidos', [PartidoController::class, 'index']);
-Route::get('/partidos/{id}', [PartidoController::class, 'show']);
+
 
